@@ -7,61 +7,33 @@
       :beverage="currentBeverage"
     />
     <ul>
-      <li>
-        <template v-for="temp in temps" :key="temp">
-          <label>
-            <input
-              type="radio"
-              name="temperature"
-              :id="`rtemp${temp}`"
-              :value="temp"
-              v-model="currentTemp"
-            />
+      <select v-model="currentTemp">
+        <option v-for="temp in temps" :key="temp">
             {{ temp }}
-          </label>
-        </template>
-      </li>
-      <li>
-        <template v-for="creamer in creamers" :key="creamer">
-          <label>
-            <input
-              type="radio"
-              name="Creamer"
-              :id="`rcreamer${creamer}`"
-              :value="creamer"
-              v-model="currentCreamer"
-            />
+        </option>
+      </select>
+      <select v-model="currentCreamer">
+        <option v-for="creamer in creamers" :key="creamer">
             {{ creamer }}
-          </label>
-        </template>
-      </li>
-      <li>
-        <template v-for="syrup in syrups" :key="syrup">
-          <label>
-            <input
-              type="radio"
-              name="Syrup"
-              :id="`rsyrup${syrup}`"
-              :value="syrup"
-              v-model="currentSyrup"
-            />
+        </option>
+      </select>
+      <select v-model="currentSyrup">
+        <option v-for="syrup in syrups" :key="syrup">
             {{ syrup }}
-          </label>
-        </template>
+        </option>
+      </select>    
+      <select v-model="currentBeverage">
+        <option v-for="baseBeverage in baseBeverages" :key="baseBeverage">
+          {{baseBeverage}}
+        </option>
+      </select>
+    </ul>
+    <ul>
+      <li>
+        <span>Name beverage: </span><input v-model="beverageName" placeholder="enter name here" />
       </li>
       <li>
-        <template v-for="baseBeverage in baseBeverages" :key="baseBeverage">
-          <label>
-            <input
-              type="radio"
-              name="Base Beverage"
-              :id="`rbase${baseBeverage}`"
-              :value="baseBeverage"
-              v-model="currentBeverage"
-            />
-            {{ baseBeverage }}
-          </label>
-        </template>
+        <button @click="saveRecipe">Save Recipe</button>
       </li>
     </ul>
   </div>
