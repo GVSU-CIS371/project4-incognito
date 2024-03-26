@@ -35,6 +35,12 @@
       <li>
         <button @click="saveRecipe">Save Recipe</button>
       </li>
+      <li>
+        <p>Saved Recipes: </p>
+        <li v-for="item in items">
+          {{item.message}}
+        </li>
+      </li>
     </ul>
   </div>
 </template>
