@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <Beverage
       :isIced="currentTemp === 'Cold'"
@@ -30,22 +31,27 @@
     </ul>
     <ul>
       <li>
-        <span>Name beverage: </span><input v-model="beverageName" placeholder="enter name here" />
+        <input v-model="beverageName" placeholder="Enter name here" />
       </li>
       <li>
         <button @click="saveRecipe">Save Recipe</button>
       </li>
       <li>
-        <p>Saved Recipes: </p>
-        <li v-for="item in items">
-          {{item.message}}
-        </li>
+        <br></br>
+        <span>Saved Recipes: </span>
+        <div v-for="recipe in store.recipes" :key="recipe.recipeName">
+        <button class="RecipeButtons" @click="showBeverage(recipe)">
+          {{ recipe.recipeName }}
+        </button>
+      </div>
       </li>
     </ul>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useSaveRecipeStore } from "../src/saveRecipe.ts";
+const store = useSaveRecipeStore();
 import { ref } from "vue";
 import Beverage from "./components/Beverage.vue";
 // Define reactive data
@@ -57,6 +63,21 @@ const syrups = ref(["None", "Vanilla", "Caramel", "Hazelnut"]);
 const currentSyrup = ref("None");
 const baseBeverages = ref(["Coffee", "Green Tea", "Black Tea"]);
 const currentBeverage = ref("Coffee");
+const beverageName = ref("");
+
+function saveRecipe() {
+  if (beverageName.value) {
+    store.addBeverage(currentTemp.value, currentCreamer.value, currentSyrup.value, currentBeverage.value, beverageName.value);
+    beverageName.value = "";
+  }
+}
+
+function showBeverage(recipe) {
+  currentTemp.value = recipe.temperature;
+  currentCreamer.value = recipe.creamer;
+  currentSyrup.value = recipe.syrup;
+  currentBeverage.value = recipe.baseBeverage;
+}
 </script>
 
 <style lang="scss">
@@ -72,5 +93,17 @@ html {
 }
 ul {
   list-style: none;
+}
+
+.RecipeButtons{
+  transition-duration: 0.4s;
+  border-radius: 50%;
+  padding: 8px;
+  margin-bottom: 5px;
+}
+
+.RecipeButtons:hover{
+  background-color: black;
+  color: white;
 }
 </style>
