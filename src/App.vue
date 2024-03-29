@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <Beverage
       :isIced="currentTemp === 'Cold'"
@@ -8,50 +7,61 @@
       :beverage="currentBeverage"
     />
     <ul>
-      <select v-model="currentTemp">
-        <option v-for="temp in temps" :key="temp">
-            {{ temp }}
-        </option>
-      </select>
-      <select v-model="currentCreamer">
-        <option v-for="creamer in creamers" :key="creamer">
-            {{ creamer }}
-        </option>
-      </select>
-      <select v-model="currentSyrup">
-        <option v-for="syrup in syrups" :key="syrup">
-            {{ syrup }}
-        </option>
-      </select>    
-      <select v-model="currentBeverage">
-        <option v-for="baseBeverage in baseBeverages" :key="baseBeverage">
-          {{baseBeverage}}
-        </option>
-      </select>
+      <div class="ingredients"> 
+        <select v-model="currentTemp">
+          <option v-for="temp in temps" :key="temp">
+              {{ temp }}
+          </option>
+        </select>
+      </div>
+      <div class="ingredients">
+        <select v-model="currentCreamer">
+          <option v-for="creamer in creamers" :key="creamer">
+              {{ creamer }}
+          </option>
+        </select>
+      </div>
+      <div class="ingredients">
+        <select v-model="currentSyrup">
+          <option v-for="syrup in syrups" :key="syrup">
+              {{ syrup }}
+          </option>
+        </select>  
+      </div>  
+      <div class="ingredients">
+        <select v-model="currentBeverage">
+          <option v-for="baseBeverage in baseBeverages" :key="baseBeverage">
+            {{baseBeverage}}
+          </option>
+        </select>
+      </div>
     </ul>
     <ul>
+    <div class="enterName">
       <li>
-        <input v-model="beverageName" placeholder="Enter name here" />
+        <span>Name Beverage? </span><input v-model="beverageName" placeholder="enter name here" />
       </li>
+    </div>
+    <div class="saveButton">
       <li>
         <button @click="saveRecipe">Save Recipe</button>
       </li>
-      <li>
-        <br></br>
-        <span>Saved Recipes: </span>
-        <div v-for="recipe in store.recipes" :key="recipe.recipeName">
-        <button class="RecipeButtons" @click="showBeverage(recipe)">
-          {{ recipe.recipeName }}
-        </button>
       </div>
-      </li>
     </ul>
+    <ul>
+    <div class="savedList">
+      <li>
+        <p>Saved Recipes: </p>
+        <li v-for="item in items">
+          {{item.message}}
+        </li>
+      </li>
+      </div>
+      </ul>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useSaveRecipeStore } from "../src/saveRecipe.ts";
-const store = useSaveRecipeStore();
 import { ref } from "vue";
 import Beverage from "./components/Beverage.vue";
 // Define reactive data
@@ -63,21 +73,6 @@ const syrups = ref(["None", "Vanilla", "Caramel", "Hazelnut"]);
 const currentSyrup = ref("None");
 const baseBeverages = ref(["Coffee", "Green Tea", "Black Tea"]);
 const currentBeverage = ref("Coffee");
-const beverageName = ref("");
-
-function saveRecipe() {
-  if (beverageName.value) {
-    store.addBeverage(currentTemp.value, currentCreamer.value, currentSyrup.value, currentBeverage.value, beverageName.value);
-    beverageName.value = "";
-  }
-}
-
-function showBeverage(recipe) {
-  currentTemp.value = recipe.temperature;
-  currentCreamer.value = recipe.creamer;
-  currentSyrup.value = recipe.syrup;
-  currentBeverage.value = recipe.baseBeverage;
-}
 </script>
 
 <style lang="scss">
@@ -92,18 +87,80 @@ html {
   background: linear-gradient(to bottom, #6e4228 0%, #956f5a 100%);
 }
 ul {
+  display:flex;
+  align-items: center;
+  justify-items: center;
   list-style: none;
 }
-
-.RecipeButtons{
-  transition-duration: 0.4s;
-  border-radius: 50%;
-  padding: 8px;
-  margin-bottom: 5px;
+div.ingredients {
+  margin-left: 40px; 
 }
 
-.RecipeButtons:hover{
-  background-color: black;
-  color: white;
+div.ingredients select {
+  border: none;
+  border-radius: 20px; 
+  padding: 10px 20px; 
+  margin-bottom: 20px;
+  appearance: none; 
+  background-color: #37343b; 
+  color: #ffffff; 
+  font-size: 16px; 
+  text-align: center;
+  cursor: pointer; 
+  font-family: Arial, sans-serif;
+}
+
+div.ingredients select::-ms-expand {
+  display: flex; 
+}
+
+div.ingredients select::after {
+  content: '\25BC'; 
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  pointer-events: none; 
+}
+.saveButton{
+  margin-bottom: 10px;
+  margin-left: 20px;
+}
+.saveButton button {
+  border: none;
+  border-radius: 10px; 
+  padding: 5px 10px; 
+  background-color: #97ae76; 
+  color: #ffffff; 
+  font-size: 16px; 
+  cursor: pointer; 
+  font-family: Arial, sans-serif;
+
+}
+
+.enterName {
+  font-weight: bold; 
+  color:#37342b;
+  margin-bottom: 10px; 
+  font-size: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.enterName input {
+  margin-left: 5px;
+  border: none;
+  border-radius: 10px; 
+  padding: 5px; 
+  background-color: #f0f0f0; 
+  font-weight: bold;
+  font-size: 16px; 
+}
+
+.savedList{
+  font-weight: bold;
+  color: #37342b;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-family: Arial, sans-serif;
 }
 </style>
