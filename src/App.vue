@@ -76,7 +76,15 @@ function saveRecipe() {
     beverageName.value = "";
   }
 }
-function showBeverage(recipe) {
+
+interface Recipe {
+  temperature: string;
+  creamer: string;
+  syrup: string;
+  baseBeverage: string;
+}
+
+function showBeverage(recipe: Recipe) {
   currentTemp.value = recipe.temperature;
   currentCreamer.value = recipe.creamer;
   currentSyrup.value = recipe.syrup;
