@@ -39,7 +39,7 @@
     <ul>
     <div class="enterName">
       <li>
-        <span>Name Beverage? </span><input v-model="beverageName" placeholder="enter name here" />
+        <span>Name Beverage: </span><input v-model="beverageName" placeholder="enter name here" />
       </li>
     </div>
     <div class="saveButton">
@@ -51,10 +51,13 @@
     <ul>
     <div class="savedList">
       <li>
-        <p>Saved Recipes: </p>
-        <li v-for="item in items">
-          {{item.message}}
-        </li>
+        <br></br>
+        <span>Saved Recipes: </span>
+        <div v-for="recipe in store.recipes" :key="recipe.recipeName">
+        <button class="RecipeButtons" @click="showBeverage(recipe)">
+          {{ recipe.recipeName }}
+        </button>
+        </div>
       </li>
       </div>
       </ul>
@@ -64,6 +67,21 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Beverage from "./components/Beverage.vue";
+import { useSaveRecipeStore } from "../src/saveRecipe.ts";
+const store = useSaveRecipeStore();
+const beverageName = ref("");
+function saveRecipe() {
+  if (beverageName.value) {
+    store.addBeverage(currentTemp.value, currentCreamer.value, currentSyrup.value, currentBeverage.value, beverageName.value);
+    beverageName.value = "";
+  }
+}
+function showBeverage(recipe) {
+  currentTemp.value = recipe.temperature;
+  currentCreamer.value = recipe.creamer;
+  currentSyrup.value = recipe.syrup;
+  currentBeverage.value = recipe.baseBeverage;
+}
 // Define reactive data
 const temps = ref(["Hot", "Cold"]);
 const currentTemp = ref("Hot");
@@ -92,10 +110,19 @@ ul {
   justify-items: center;
   list-style: none;
 }
+.RecipeButtons{
+  transition-duration: 0.4s;
+  border-radius: 50%;
+  padding: 8px;
+  margin-bottom: 5px;
+}
+.RecipeButtons:hover{
+  background-color: black;
+  color: white;
+}
 div.ingredients {
   margin-left: 40px; 
 }
-
 div.ingredients select {
   border: none;
   border-radius: 20px; 
@@ -109,11 +136,9 @@ div.ingredients select {
   cursor: pointer; 
   font-family: Arial, sans-serif;
 }
-
 div.ingredients select::-ms-expand {
   display: flex; 
 }
-
 div.ingredients select::after {
   content: '\25BC'; 
   position: absolute;
@@ -135,9 +160,7 @@ div.ingredients select::after {
   font-size: 16px; 
   cursor: pointer; 
   font-family: Arial, sans-serif;
-
 }
-
 .enterName {
   font-weight: bold; 
   color:#37342b;
@@ -145,7 +168,6 @@ div.ingredients select::after {
   font-size: 20px;
   font-family: Arial, sans-serif;
 }
-
 .enterName input {
   margin-left: 5px;
   border: none;
@@ -155,7 +177,6 @@ div.ingredients select::after {
   font-weight: bold;
   font-size: 16px; 
 }
-
 .savedList{
   font-weight: bold;
   color: #37342b;
